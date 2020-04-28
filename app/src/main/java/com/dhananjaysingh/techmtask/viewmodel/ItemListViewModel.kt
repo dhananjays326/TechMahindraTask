@@ -30,8 +30,8 @@ class ItemListViewModel : BaseViewModel() {
     }
 
 
-    @BindingAdapter(value =["imageUrl"])
-    fun loadImage(imageView: ImageView, imageUrl:String?){
-
-    }
+//    @BindingAdapter(value =["imageUrl"])
+//    fun loadImage(imageView: ImageView, imageUrl:String?){
+//
+//    }
 }

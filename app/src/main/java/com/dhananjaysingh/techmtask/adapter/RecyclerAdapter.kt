@@ -12,13 +12,14 @@ import com.dhananjaysingh.techmtask.viewmodel.ItemListViewModel
 
 class RecyclerAdapter() : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private lateinit var items:List<Item_ListModel>
-
-    fun RecyclerAdapter(items: List<Item_ListModel>){
-        this.items = items
+  var items:ArrayList<Item_ListModel> = arrayListOf()
+    init {
+        items.clear()
     }
 
-
+    fun RecyclerAdapter(items: ArrayList<Item_ListModel>){
+        this.items = items
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding : SingleRowBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.single_row,parent,false)
 
@@ -27,7 +28,7 @@ class RecyclerAdapter() : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-       return items.size
+       return  items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

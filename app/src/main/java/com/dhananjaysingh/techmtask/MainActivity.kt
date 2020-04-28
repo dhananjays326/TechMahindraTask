@@ -18,25 +18,37 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     lateinit var viewModel : MainActivityViewModel
     private var errorSnackbar: Snackbar? = null
+    private var myApplication:MyApplication = MyApplication()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
+       myApplication.appComponent.inject(this)
+
 
         binding = DataBindingUtil.setContentView(this,
-            R.layout.activity_main
-        )
+            R.layout.activity_main)
+
 
         binding.postList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
 
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
+        viewModel.toolBarTitleLiveData.observe(this, Observer {
+            binding.toolbar.title =it.toString()
+        })
+
         viewModel.errorMessage.observe(this, Observer {
                 errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
         })
 
         binding.viewmodel = viewModel
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.swipeRefresh()
+
+            binding.swipeRefreshLayout.isRefreshing=false
+        }
     }
 
     private fun showError(@StringRes errorMessage:Int){

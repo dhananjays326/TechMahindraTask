@@ -1,12 +1,14 @@
 package com.dhananjaysingh.techmtask.viewmodel
 
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dhananjaysingh.techmtask.R
 import com.dhananjaysingh.techmtask.adapter.RecyclerAdapter
 import com.dhananjaysingh.techmtask.base.BaseViewModel
 import com.dhananjaysingh.techmtask.model.Item_ListModel
+import com.dhananjaysingh.techmtask.model.Item_ParentModel
 import com.dhananjaysingh.techmtask.network.PostApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,12 +25,17 @@ class MainActivityViewModel : BaseViewModel() {
     val postListAdapter: RecyclerAdapter = RecyclerAdapter()
 
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
+    private var mAndroidArrayList: ArrayList<Item_ListModel>? = null
 
     val errorMessage:MutableLiveData<Int> = MutableLiveData()
     val errorClickListener = View.OnClickListener { loadPosts() }
+    var toolBarTitle = MutableLiveData<String>()
+    val toolBarTitleLiveData:LiveData<String>
+        get()=toolBarTitle
 
     init{
         loadPosts()
+        toolBarTitle.value = "Tech Mahindra Task"
     }
 
     private fun loadPosts(){
@@ -46,6 +53,7 @@ class MainActivityViewModel : BaseViewModel() {
 
     }
     private fun onRetrievePostListStart(){
+
         loadingVisibility.value = View.VISIBLE
         errorMessage.value = null
     }
@@ -54,18 +62,27 @@ class MainActivityViewModel : BaseViewModel() {
         loadingVisibility.value = View.GONE
     }
 
-    private fun onRetrievePostListSuccess(postList:List<Item_ListModel>){
-        postListAdapter.RecyclerAdapter(postList)
+    private fun onRetrievePostListSuccess(postList:Item_ParentModel){
+
+        toolBarTitle.value = postList.title
+        mAndroidArrayList = ArrayList(postList.rows)
+
+        postListAdapter.RecyclerAdapter(mAndroidArrayList!!)
+        postListAdapter.notifyDataSetChanged()
+
     }
 
     private fun onRetrievePostListError(){
         errorMessage.value = R.string.post_error
     }
-
-
     override fun onCleared() {
         super.onCleared()
         subscription.dispose()
+    }
+
+
+    fun swipeRefresh(){
+        loadPosts()
     }
 
 

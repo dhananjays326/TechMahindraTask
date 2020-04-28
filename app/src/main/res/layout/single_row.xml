@@ -10,29 +10,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:weightSum="3">
+    android:layout_marginBottom="1dp"
+    android:background="@color/colorWhite">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:text="@{itemModel.postTitle}"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_vertical"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlue"
+        android:text="@{itemModel.postTitle!=null ? itemModel.postTitle:@string/nulltext}"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2.0"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="3">
         <TextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="2.0"
-            android:text="@{itemModel.postDescription}"/>
-        <ImageView
+            android:gravity="fill_vertical"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:elegantTextHeight="true"
+
+            android:text="@{itemModel.postDescription!=null ? itemModel.postDescription:@string/nulltext}"/>
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:imageUrl="@{itemModel.postImageHref}"
+            app:error="@{@drawable/ic_error}"
             />
+        </LinearLayout>
 
 
     </LinearLayout>
